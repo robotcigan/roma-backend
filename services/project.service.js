@@ -13,5 +13,8 @@ module.exports = {
   },
   getById(id) {
 
+  },
+  create({title, description}) {
+    return Project.create({title, description});
   }
 };

@@ -30,6 +30,19 @@ class ProjectController {
         next(rej);
       });
   }
+
+  create(req, res, next) {
+    projectService.create(req.body)
+      .then(project => {
+        req.dataOut = project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej.toJSON());
+        next(rej.toJSON());
+      });
+  }
 }
 
 module.exports = ProjectController;

@@ -5,5 +5,6 @@ const router = require('express').Router()
     , ProjectInstance = new ProjectController();
 
 router.get('/', ProjectInstance.getList.bind(ProjectInstance));
+router.post('/', ProjectInstance.create.bind(ProjectInstance));
 
 module.exports = router;

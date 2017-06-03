@@ -38,6 +38,9 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
+  if (!Object.keys(err).length) {
+    err = errors.api.default;
+  }
   res.send({
     success: false
   , error: err
