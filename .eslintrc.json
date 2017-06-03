@@ -20,6 +20,18 @@
     "semi": [
       "error",
       "always"
+    ],
+    "new-cap": "off",
+    "max-len": "off",
+    "comma-dangle": "off",
+    "eol-last": "off",
+    "comma-style": [
+      "error",
+      "first"
+    ],
+    "one-var": [
+      "error",
+      "always"
     ]
   }
 }
