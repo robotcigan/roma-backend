@@ -1,5 +1,7 @@
 'use strict';
 
+require('./utils/clearByInstances');
+
 const express = require('express')
     , bodyParser = require('body-parser')
     , app = express()

@@ -21,7 +21,7 @@ class ProjectController {
   getList(req, res, next) {
     projectService.getList()
       .then(projects => {
-        req.dataOut = projects;
+        req.dataOut = projects.clearByInstances();
         next();
       })
       .catch(rej => {

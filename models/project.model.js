@@ -1,6 +1,7 @@
 'use strict';
 
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+    , _ = require('lodash');
 
 const Scheme = new mongoose.Schema({
   title: {type: String, index: {unique: true}},
@@ -8,14 +9,15 @@ const Scheme = new mongoose.Schema({
   created: Date
 });
 
-Scheme.methods.clear = function() {
-  return mongoose.model('Team').clear(this);
-};
-
-Scheme.statics.clear = function(project) {
-  let projectOut = null;
-  if (project.toObject) {
-    projectOut = project.toObject();
+Scheme.methods.clear = function(...fields) {
+  let projectOut = this;
+  if (this.toObject) {
+    projectOut = this.toObject();
+    if (fields && fields.length) {
+      _.each(fields, field => {
+        delete projectOut[field];
+      });
+    }
   }
   return projectOut;
 };

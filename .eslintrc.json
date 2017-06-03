@@ -30,6 +30,7 @@
     "arrow-parens": [
       "warn",
       "as-needed"
-    ]
+    ],
+    "no-extend-native": "off"
   }
 }
