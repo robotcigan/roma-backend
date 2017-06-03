@@ -25,13 +25,11 @@
     "max-len": "off",
     "comma-dangle": "off",
     "eol-last": "off",
-    "comma-style": [
-      "error",
-      "first"
-    ],
-    "one-var": [
-      "error",
-      "always"
+    "comma-style": "off",
+    "one-var": "off",
+    "arrow-parens": [
+      "warn",
+      "as-needed"
     ]
   }
 }

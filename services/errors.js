@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 
-const errList = {
+let errList = {
   api: {
     default: {
       code: 1000,

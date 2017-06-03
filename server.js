@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/v1/project', require('./routes/project'));
+app.use('/api/v1/project', require('./routes/project'));
 
 app.use((req, res, next) => {
   if (!req.dataOut) {
