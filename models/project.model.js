@@ -22,6 +22,8 @@ Scheme.methods.clear = function(...fields) {
   if (this.toObject) {
     projectOut = this.toObject();
     delete projectOut['__v'];
+    projectOut.id = projectOut['_id'].toString();
+    delete projectOut['_id'];
     if (fields && fields.length) {
       _.each(fields, field => {
         delete projectOut[field];

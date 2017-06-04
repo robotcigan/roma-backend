@@ -38,9 +38,9 @@ class ProjectController {
         next();
       })
       .catch(rej => {
-        console.log('rej');
-        console.log(rej.toJSON());
-        next(rej.toJSON());
+        // console.log('rej');
+        // console.log(rej.toJSON());
+        next(rej);
       });
   }
 }

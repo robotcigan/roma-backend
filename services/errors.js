@@ -44,6 +44,16 @@ let errList = {
       code: 3000,
       description: 'Metadata error'
     },
+  },
+  project: {
+    default: {
+      code: 4000,
+      description: 'Project error'
+    },
+    not_found: {
+      code: 4001,
+      description: 'Project |var| not found'
+    }
   }
 };
 
@@ -64,6 +74,14 @@ function extendError(ob, originalError) {
 function assignEx(errObj) {
   errObj['ex'] = function(originalError) {
     return extendError(errObj, originalError);
+  };
+  errObj['mongoErr'] = function(err) {
+    if (err.name === 'MongoError') {
+      return {
+        code: errObj.code,
+        description: err.errmsg
+      };
+    }
   };
   errObj['withVar'] = function(data) {
     return {
