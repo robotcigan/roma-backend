@@ -4,20 +4,18 @@ const mongoose = require('mongoose')
     , _ = require('lodash')
     , moment = require('moment');
 
-const Scheme = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    auto: true,
-  },
+const Project = new mongoose.Schema({
   title: {type: String, required: true, index: {unique: true}},
   description: {type: String, default: ''},
+  handle: {type: String, required: true, index: {unique: true}},
   status: {type: String, default: ''},
   order: {type: Number, default: 0},
   active: {type: Boolean, default: false},
-  created: {type: Date, default: moment()}
+  created: {type: Date, default: moment()},
+  images: [{type: mongoose.Schema.Types.ObjectId, ref: 'Image'}]
 });
 
-Scheme.methods.clear = function(...fields) {
+Project.methods.clear = function(...fields) {
   let projectOut = this;
   if (this.toObject) {
     projectOut = this.toObject();
@@ -33,4 +31,4 @@ Scheme.methods.clear = function(...fields) {
   return projectOut;
 };
 
-module.exports = mongoose.model('Project', Scheme);
+module.exports = mongoose.model('Project', Project);

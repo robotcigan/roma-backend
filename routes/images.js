@@ -9,11 +9,14 @@ const router = require('express').Router()
       cb(null, './uploads');
     },
     filename: (req, file, cb) => {
-      // cb(null, file.fieldname + '-' + Date.now());
-      cb(null, file.filename);
+      cb(null, file.fieldname + '-' + Date.now() + '_' + file.originalname);
+      console.log('storage');
+      console.log(file);
+      // cb(null, file.filename);
     }
   })
   , upload = multer({storage});
+  // , upload = multer({dest: 'uploads'});
 
 router.post('/', upload.single('img'), ImagesInstance.addImage.bind(ImagesInstance));
 

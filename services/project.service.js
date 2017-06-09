@@ -17,13 +17,7 @@ module.exports = {
 
   },
   create({title, description}) {
-    return Project.create({title, description})
-      .catch(rej => {
-        console.log('rej');
-        console.log(rej.toString());
-        console.log(rej instanceof mongoose.Error);
-        // throw errors.dbo.default.mongoErr(rej);
-        throw rej.toString();
-      });
+    // return Project.create({title, description, images: [{test: 'one'}, {test: 'two'}]});
+    return Project.create({title, description});
   }
 };

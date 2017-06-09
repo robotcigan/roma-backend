@@ -43,6 +43,10 @@ class ProjectController {
         next(rej);
       });
   }
+
+  addImage(req, res, next) {
+
+  }
 }
 
 module.exports = ProjectController;
