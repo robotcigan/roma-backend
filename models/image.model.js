@@ -8,7 +8,11 @@ const Image = new mongoose.Schema({
   projectId: {type: mongoose.SchemaTypes.ObjectId, ref: 'Project'},
   handle: {type: String, required: true, index: {unique: true}},
   order: {type: Number, default: 0},
-  name: {type: String, default: ''},
+  originalName: {type: String, default: ''},
+  projectName: {type: String, default: ''},
+  title: {type: String, default: ''},
+  description: {type: String, default: ''},
+  url: {type: String, default: ''},
   created: {type: Date, default: moment()},
   timestamp: {type: Number, required: true, index: {unique: true}}
 });

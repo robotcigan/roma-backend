@@ -21,6 +21,6 @@ router.post('/', ProjectInstance.create.bind(ProjectInstance));
 /**
  * Add image to project by handle
  */
-router.post('/:handle/image', authMw.admin, imageMw.array(), ProjectInstance.addImage.bind(ProjectInstance));
+router.post('/:handle/image', authMw.admin, imageMw.single(), ProjectInstance.addImage.bind(ProjectInstance));
 
 module.exports = router;

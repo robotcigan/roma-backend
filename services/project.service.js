@@ -14,10 +14,30 @@ module.exports = {
       });
   },
   getById(id) {
-
   },
-  create({title, description}) {
-    // return Project.create({title, description, images: [{test: 'one'}, {test: 'two'}]});
-    return Project.create({title, description});
+  getByHandle(handle) {
+    return Project.findOne({handle});
+  },
+  create({title, description, handle}) {
+    return Project.create({title, description, handle});
+  },
+  addImageByHandle(handle, imageData) {
+    return this.getByHandle(handle)
+      .then(project => {
+        imageData['_id'] = mongoose.Types.ObjectId();
+        project.images.push(imageData);
+        project.updated = moment();
+        return project.save();
+      });
+  },
+  addImagesByHandle(handle, imagesData = []) {
+    return this.getByHandle(handle)
+      .then(project => {
+        _.each(imagesData, item => {
+          project.images.push(item);
+        });
+        project.updated = moment();
+        return project.save();
+      });
   }
 };

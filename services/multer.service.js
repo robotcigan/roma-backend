@@ -5,6 +5,8 @@ module.exports = {
     done(null, './uploads');
   },
   filename: function(req, file, done) {
-    done(null, file.fieldname + '-' + Date.now() + '_' + file.originalname);
+    const timestamp = Date.now();
+    req.body.timestamp = timestamp;
+    done(null, req.params.handle + '-' + timestamp + '-' + file.originalname);
   }
 };

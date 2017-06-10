@@ -12,6 +12,7 @@ const Project = new mongoose.Schema({
   order: {type: Number, default: 0},
   active: {type: Boolean, default: false},
   created: {type: Date, default: moment()},
+  updated: {type: Date, default: moment()},
   images: [{type: mongoose.Schema.Types.ObjectId, ref: 'Image'}]
 });
 

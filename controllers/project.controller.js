@@ -1,6 +1,9 @@
 'use strict';
 
-const projectService = require('../services/project.service');
+const fs = require('fs')
+    , projectService = require('../services/project.service')
+    , imageService = require('../services/image.service')
+    , errors = require('../services/errors');
 
 /**
  * Project middleware
@@ -44,18 +47,41 @@ class ProjectController {
       });
   }
 
+  /**
+   * Add image to project by handle
+   * @ApiParams {string} handle - project
+   * @ApiBody {string} handle - image
+   * @ApiBody {string?} title
+   * @ApiBody {string?} description
+   * @ApiBody {number?} order
+   */
   addImage(req, res, next) {
-    console.log(req.files);
+    console.log(req.file);
     console.log(req.body);
-    console.log(typeof req.body);
-    try {
-      console.log(JSON.parse(req.body['0']));
-    } catch (e) {
-      console.log(e);
-      next(new Error(e));
+    if (!req.file) {
+      return next(errors.api.bad_params);
     }
-    req.dataOut = [];
-    next();
+    let data = {
+      projectName: req.params.handle,
+      handle: req.body.handle,
+      title: req.body.title,
+      description: req.body.description,
+      order: req.body.order,
+      timestamp: req.body.timestamp,
+      originalName: req.file.originalname
+    };
+    projectService.addImageByHandle(req.params.handle, data)
+      .then(project => {
+        req.dataOut = project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        imageService.removeByName(req.file.filename)
+          .then(res => next(rej))
+          .catch(next);
+      });
   }
 }
 

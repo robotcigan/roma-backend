@@ -13,5 +13,6 @@ module.exports = {
     return upload.array('img');
   },
   single: function() {
+    return upload.single('img');
   }
 };
