@@ -2,9 +2,34 @@
 
 const fs = require('fs')
     , path = require('path')
+    , errors = require('./errors')
     , Image = require('../models/image.model');
 
 module.exports = {
+  uploadPath: path.resolve(__dirname, '..', 'uploads'),
+  getByHandle(handle) {
+    return Image.findOne({handle})
+      .then(image => {
+        if (!image) {
+          throw errors.api.bad_params;
+        }
+        // return this.getByUrl(image.url || `${image.projectName}-${image.timestamp}-${originalName}`)
+        return (image.url || path.join(this.uploadPath, `${image.projectName}-${image.timestamp}-${image.originalName}`));
+      });
+  },
+  getByUrl(url) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(path.join(this.uploadPath, url), 'utf-8', (err, file) => {
+        if (err) {
+          return reject(err);
+        }
+        if (!file) {
+          return reject();
+        }
+        resolve(file);
+      });
+    });
+  },
   create(imageData) {
     return Image.create(imageData);
   },
