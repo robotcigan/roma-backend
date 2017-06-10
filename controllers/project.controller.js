@@ -45,7 +45,16 @@ class ProjectController {
   }
 
   addImage(req, res, next) {
-
+    console.log(req.files);
+    console.log(req.body);
+    console.log(typeof req.body);
+    try {
+      console.log(JSON.parse(req.body['0']));
+    } catch (e) {
+      console.log(e);
+    }
+    req.dataOut = [];
+    next();
   }
 }
 

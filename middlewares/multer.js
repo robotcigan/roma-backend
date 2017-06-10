@@ -10,7 +10,7 @@ const multer = require('multer')
 
 module.exports = {
   array: function() {
-    return upload.array();
+    return upload.array('img');
   },
   single: function() {
   }
