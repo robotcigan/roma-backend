@@ -52,6 +52,7 @@ class ProjectController {
       console.log(JSON.parse(req.body['0']));
     } catch (e) {
       console.log(e);
+      next(new Error(e));
     }
     req.dataOut = [];
     next();

@@ -2,6 +2,7 @@
 
 const router = require('express').Router()
     , imageMw = require('../middlewares/multer')
+    , authMw = require('../middlewares/auth')
     , ProjectController = require('../controllers/project.controller')
     , ProjectInstance = new ProjectController();
 
@@ -20,6 +21,6 @@ router.post('/', ProjectInstance.create.bind(ProjectInstance));
 /**
  * Add image to project by handle
  */
-router.post('/:handle/image', imageMw.array(), ProjectInstance.addImage.bind(ProjectInstance));
+router.post('/:handle/image', authMw.admin, imageMw.array(), ProjectInstance.addImage.bind(ProjectInstance));
 
 module.exports = router;

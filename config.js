@@ -12,5 +12,9 @@ module.exports = {
     key: 'kasjks9qv4koahg',
     secret: 'cnmf6vhs58pvd3h',
     access_token: 'biGmny9HBfAAAAAAAAAABuSvtUdDtkMBgyJ9Q97n3BW5nt9sQTdRDAK1xAZf5Ket'
+  },
+  user: {
+    username: 'admin',
+    password: '1'
   }
 };
