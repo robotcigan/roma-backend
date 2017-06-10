@@ -19,7 +19,15 @@ module.exports = {
   getById(id) {
   },
   getByHandle(handle) {
-    return Project.findOne({handle});
+    return Project.findOne({handle})
+      .populate('images')
+      .exec()
+      .then(project => {
+        if (!project) {
+          throw errors.project.not_found.withVar('\"' + handle + '\"');
+        }
+        return project;
+      });
   },
   create({title, description, handle}) {
     return Project.create({title, description, handle});

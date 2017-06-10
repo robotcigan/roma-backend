@@ -15,6 +15,10 @@ const router = require('express').Router()
  */
 router.get('/', ProjectInstance.getList.bind(ProjectInstance));
 /**
+ * Get project by handle
+ */
+router.get('/:handle', ProjectInstance.getByHandle.bind(ProjectInstance));
+/**
  * Create new project
  */
 router.post('/', ProjectInstance.create.bind(ProjectInstance));

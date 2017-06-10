@@ -34,6 +34,25 @@ class ProjectController {
       });
   }
 
+  /**
+   * Get project by handle
+   * @param req
+   * @param res
+   * @param next
+   */
+  getByHandle(req, res, next) {
+    projectService.getByHandle(req.params.handle)
+      .then(project => {
+        req.dataOut = project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
+      });
+  }
+
   create(req, res, next) {
     projectService.create(req.body)
       .then(project => {
