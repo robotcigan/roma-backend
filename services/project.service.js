@@ -4,11 +4,14 @@ const _ = require('lodash')
     , moment = require('moment')
     , mongoose = require('mongoose')
     , errors = require('./errors')
-    , Project = require('../models/project.model');
+    , Project = require('../models/project.model')
+    , imageService = require('../services/image.service');
 
 module.exports = {
   getList: function() {
     return Project.find()
+      .populate('images')
+      .exec()
       .then(projects => {
         return projects;
       });
@@ -24,10 +27,12 @@ module.exports = {
   addImageByHandle(handle, imageData) {
     return this.getByHandle(handle)
       .then(project => {
-        imageData['_id'] = mongoose.Types.ObjectId();
-        project.images.push(imageData);
-        project.updated = moment();
-        return project.save();
+        return imageService.create(imageData)
+          .then(image => {
+            project.images.push(image);
+            project.updated = moment();
+            return project.save();
+          });
       });
   },
   addImagesByHandle(handle, imagesData = []) {
