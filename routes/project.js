@@ -1,6 +1,7 @@
 'use strict';
 
 const router = require('express').Router()
+    , imageMw = require('../middlewares/multer')
     , ProjectController = require('../controllers/project.controller')
     , ProjectInstance = new ProjectController();
 
@@ -19,6 +20,6 @@ router.post('/', ProjectInstance.create.bind(ProjectInstance));
 /**
  * Add image to project by handle
  */
-router.post('/image', ProjectInstance.addImage.bind(ProjectInstance));
+router.post('/:handle/image', imageMw.array(), ProjectInstance.addImage.bind(ProjectInstance));
 
 module.exports = router;
