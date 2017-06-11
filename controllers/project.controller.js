@@ -1,3 +1,4 @@
+/* eslint valid-jsdoc: 0 */
 'use strict';
 
 const fs = require('fs')
@@ -5,21 +6,11 @@ const fs = require('fs')
     , imageService = require('../services/image.service')
     , errors = require('../services/errors');
 
-/**
- * Project middleware
- */
 class ProjectController {
-
-  /**
-   * @constructor
-   */
   constructor() {}
 
   /**
    * Get list of projects
-   * @param {object} req
-   * @param {object} res
-   * @param {function} next
    */
   getList(req, res, next) {
     projectService.getList()
