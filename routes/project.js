@@ -15,13 +15,20 @@ const router = require('express').Router()
  */
 router.get('/', ProjectInstance.getList.bind(ProjectInstance));
 /**
+ * Create new project
+ */
+router.post('/', ProjectInstance.create.bind(ProjectInstance));
+/**
+ * Remove project by handle with images (optional)
+ */
+router.delete('/:handle', ProjectInstance.removeByHandle.bind(ProjectInstance));
+/**
  * Get project by handle
  */
 router.get('/:handle', ProjectInstance.getByHandle.bind(ProjectInstance));
 /**
- * Create new project
+ * Update project main info by handle
  */
-router.post('/', ProjectInstance.create.bind(ProjectInstance));
 router.put('/:handle', authMw.admin, ProjectInstance.updateByHandle.bind(ProjectInstance));
 /**
  * Add image to project by handle

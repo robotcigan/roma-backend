@@ -47,6 +47,19 @@ module.exports = {
         return project;
       });
   },
+  removeByHandle(handle, withImages) {
+    return Project.remove({handle})
+      .then(command => {
+        console.log(command.result.n);
+        if (command.result.n === 0) {
+          throw errors.project.not_found.withVar('\"' + handle + '\"');
+        }
+        if (withImages) {
+          return imageService.removeByProjectHandle(handle);
+        }
+        return true;
+      });
+  },
   /**
    * Add image to project by handle
    * @param {string} handle

@@ -33,7 +33,7 @@ module.exports = {
   create(imageData) {
     return Image.create(imageData);
   },
-  removeByName(fileName) {
+  removeFileByName(fileName) {
     let uploadsPath = path.resolve(__dirname, '..', 'uploads');
     return new Promise((resolve, reject) => {
       fs.unlink(path.join(uploadsPath, fileName), err => {
@@ -45,5 +45,14 @@ module.exports = {
       });
       resolve(uploadsPath);
     });
+  },
+  removeByProjectHandle(projectName) {
+    return Image.find({projectName})
+      .then(images => {
+        images.forEach(image => {
+          this.removeFileByName(image.fullName);
+        });
+        return Image.remove({projectName});
+      });
   }
 };

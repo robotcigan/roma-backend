@@ -70,6 +70,20 @@ class ProjectController {
       });
   }
 
+  removeByHandle(req, res, next) {
+    const withImages = req.query ? req.query.options.split(',').indexOf('with-images') !== -1 : false;
+    projectService.removeByHandle(req.params.handle, withImages)
+      .then(() => {
+        req.dataOut = [];
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
+      });
+  }
+
   /**
    * Add image to project by handle
    * @ApiParams {string} handle - project
@@ -91,7 +105,8 @@ class ProjectController {
       description: req.body.description,
       order: req.body.order,
       timestamp: req.body.timestamp,
-      originalName: req.file.originalname
+      originalName: req.file.originalname,
+      fullName: req.file.filename
     };
     projectService.addImageByHandle(req.params.handle, data)
       .then(project => {
@@ -101,7 +116,7 @@ class ProjectController {
       .catch(rej => {
         console.log('rej');
         console.log(rej);
-        imageService.removeByName(req.file.filename)
+        imageService.removeFileByName(req.file.filename)
           .then(res => next(rej))
           .catch(next);
       });
