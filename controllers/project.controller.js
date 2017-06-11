@@ -57,6 +57,19 @@ class ProjectController {
       });
   }
 
+  updateByHandle(req, res, next) {
+    projectService.updateByHandle(req.params.handle, req.body)
+      .then(project => {
+        req.dataOut = project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
+      });
+  }
+
   /**
    * Add image to project by handle
    * @ApiParams {string} handle - project

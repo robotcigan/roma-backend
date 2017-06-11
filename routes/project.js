@@ -22,6 +22,7 @@ router.get('/:handle', ProjectInstance.getByHandle.bind(ProjectInstance));
  * Create new project
  */
 router.post('/', ProjectInstance.create.bind(ProjectInstance));
+router.put('/:handle', authMw.admin, ProjectInstance.updateByHandle.bind(ProjectInstance));
 /**
  * Add image to project by handle
  */

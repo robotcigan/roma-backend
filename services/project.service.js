@@ -32,6 +32,27 @@ module.exports = {
   create({title, description, handle}) {
     return Project.create({title, description, handle});
   },
+  /**
+   * Update project by handle
+   * @param {string} handle
+   * @param {object} data
+   * @return {Promise<projectModel>} project
+   */
+  updateByHandle(handle, data) {
+    return Project.findOneAndUpdate({handle}, data, {new: true})
+      .then(project => {
+        if (!project) {
+          throw errors.project.not_found.withVar('\"' + handle + '\"');
+        }
+        return project;
+      });
+  },
+  /**
+   * Add image to project by handle
+   * @param {string} handle
+   * @param {object} imageData
+   * @return {Promise<projectModel>} project
+   */
   addImageByHandle(handle, imageData) {
     return this.getByHandle(handle)
       .then(project => {
@@ -43,6 +64,12 @@ module.exports = {
           });
       });
   },
+  /**
+   * @deprecated
+   * @param {string} handle
+   * @param {array} imagesData
+   * @return {Promise<projectModel>} project
+   */
   addImagesByHandle(handle, imagesData = []) {
     return this.getByHandle(handle)
       .then(project => {
