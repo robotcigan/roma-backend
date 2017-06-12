@@ -1,3 +1,4 @@
+/* eslint valid-jsdoc: 0 */
 'use strict';
 
 const fs = require('fs')
@@ -5,21 +6,11 @@ const fs = require('fs')
     , imageService = require('../services/image.service')
     , errors = require('../services/errors');
 
-/**
- * Project middleware
- */
 class ProjectController {
-
-  /**
-   * @constructor
-   */
   constructor() {}
 
   /**
    * Get list of projects
-   * @param {object} req
-   * @param {object} res
-   * @param {function} next
    */
   getList(req, res, next) {
     projectService.getList()
@@ -67,6 +58,47 @@ class ProjectController {
   }
 
   /**
+   * Update main info about project by handle
+   * @ApiParam {string} handle
+   * @ApiBody? {string} title
+   * @ApiBody? {string} description
+   * @ApiBody? {string} status
+   * @ApiBody? {number} order
+   * @ApiBody? {boolean} active
+   */
+  updateByHandle(req, res, next) {
+    projectService.updateByHandle(req.params.handle, req.body)
+      .then(project => {
+        req.dataOut = project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
+      });
+  }
+
+  /**
+   * Remove project by handle with images (optional)
+   * @ApiQuery? {string} options [with-images]
+   * @ApiParam {string} handle
+   */
+  removeByHandle(req, res, next) {
+    const withImages = req.query.options ? req.query.options.split(',').indexOf('with-images') !== -1 : false;
+    projectService.removeByHandle(req.params.handle, withImages)
+      .then(_removed => {
+        req.dataOut = _removed;
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
+      });
+  }
+
+  /**
    * Add image to project by handle
    * @ApiParams {string} handle - project
    * @ApiBody {string} handle - image
@@ -81,13 +113,14 @@ class ProjectController {
       return next(errors.api.bad_params);
     }
     let data = {
-      projectName: req.params.handle,
+      projectHandle: req.params.handle,
       handle: req.body.handle,
       title: req.body.title,
       description: req.body.description,
       order: req.body.order,
       timestamp: req.body.timestamp,
-      originalName: req.file.originalname
+      originalName: req.file.originalname,
+      fullName: req.file.filename
     };
     projectService.addImageByHandle(req.params.handle, data)
       .then(project => {
@@ -97,9 +130,61 @@ class ProjectController {
       .catch(rej => {
         console.log('rej');
         console.log(rej);
-        imageService.removeByName(req.file.filename)
+        imageService.removeFileByName(req.file.filename)
           .then(res => next(rej))
           .catch(next);
+      });
+  }
+
+  /**
+   * Add multiple images to project by handle,
+   * with main information for navigation
+   * @ApiParam {string} handle - project
+   * @ApiBody {file} img
+   */
+  addImages(req, res, next) {
+    if (!req.files) {
+      return next(errors.api.bad_params);
+    }
+    let data = [];
+    req.files.forEach(item => {
+      data.push({
+        projectHandle: req.params.handle,
+        handle: req.params.handle + '-' + item.timestamp,
+        timestamp: item.timestamp,
+        originalName: item.originalname,
+        fullName: item.filename
+      });
+    });
+    projectService.addImagesByHandle(req.params.handle, data)
+      .then(project => {
+        req.dataOut = project.clear();
+        next();
+      })
+      .catch(rej => {
+        data.forEach(item => {
+          imageService.removeFileByName(item.fullName)
+            .then(res => next(rej))
+            .catch(next);
+        });
+      });
+  }
+
+  /**
+   * Remove image by id in project by handle
+   * @ApiParam {string} handle - project
+   * @ApiParam {string} imageId - image ObjectId
+   */
+  removeImageById(req, res, next) {
+    projectService.removeImageByHandle(req.params.handle, req.params.imageId)
+      .then(_project => {
+        req.dataOut = _project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
       });
   }
 }

@@ -33,7 +33,20 @@ module.exports = {
   create(imageData) {
     return Image.create(imageData);
   },
-  removeByName(fileName) {
+  createMany(imagesData) {
+    return Image.insertMany(imagesData);
+  },
+  removeById(id) {
+    return Image.findById(id)
+      .then(image => {
+        if (!image) {
+          throw errors.image.not_found.withVar('\"' + id + '\"');
+        }
+        this.removeFileByName(image.fullName);
+        return Image.remove({_id: id});
+      });
+  },
+  removeFileByName(fileName) {
     let uploadsPath = path.resolve(__dirname, '..', 'uploads');
     return new Promise((resolve, reject) => {
       fs.unlink(path.join(uploadsPath, fileName), err => {
@@ -45,5 +58,14 @@ module.exports = {
       });
       resolve(uploadsPath);
     });
+  },
+  removeByProjectHandle(projectHandle) {
+    return Image.find({projectHandle})
+      .then(images => {
+        images.forEach(image => {
+          this.removeFileByName(image.fullName);
+        });
+        return Image.remove({projectHandle});
+      });
   }
 };

@@ -4,7 +4,7 @@ const dropboxService = require('../services/dropbox')
     , imageService = require('../services/image.service')
     , errors = require('../services/errors');
 
-class ImagesControler {
+class ImagesController {
   constructor() {
   }
 
@@ -21,4 +21,4 @@ class ImagesControler {
   }
 }
 
-module.exports = ImagesControler;
+module.exports = ImagesController;

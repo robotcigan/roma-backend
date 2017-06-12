@@ -22,6 +22,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/project', require('./routes/project'));
 app.use('/api/v1/img', require('./routes/images'));
+app.use('/api/v1/user', require('./routes/user'));
 
 app.use((req, res, next) => {
   if (!req.dataOut) {
