@@ -51,14 +51,22 @@ module.exports = {
   removeByHandle(handle, withImages) {
     return Project.remove({handle})
       .then(command => {
-        console.log(command.result.n);
+        let result = {
+          project: 0,
+          image: 0
+        };
         if (command.result.n === 0) {
           throw errors.project.not_found.withVar('\"' + handle + '\"');
         }
+        result.project = command.result.n;
         if (withImages) {
-          return imageService.removeByProjectHandle(handle);
+          return imageService.removeByProjectHandle(handle)
+            .then(command => {
+              result.image = command.result.n;
+              return result;
+            });
         }
-        return true;
+        return result;
       });
   },
   /**
@@ -96,5 +104,8 @@ module.exports = {
             return project.save();
           });
       });
+  },
+  removeImageByHandle(handle, imageHandle) {
+
   }
 };

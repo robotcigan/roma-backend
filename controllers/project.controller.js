@@ -85,10 +85,10 @@ class ProjectController {
    * @ApiParam {string} handle
    */
   removeByHandle(req, res, next) {
-    const withImages = req.query ? req.query.options.split(',').indexOf('with-images') !== -1 : false;
+    const withImages = req.query.options ? req.query.options.split(',').indexOf('with-images') !== -1 : false;
     projectService.removeByHandle(req.params.handle, withImages)
-      .then(() => {
-        req.dataOut = [];
+      .then(_removed => {
+        req.dataOut = _removed;
         next();
       })
       .catch(rej => {

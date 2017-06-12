@@ -54,6 +54,16 @@ let errList = {
       code: 4001,
       description: 'Project |var| not found'
     }
+  },
+  image: {
+    default: {
+      code: 5000,
+      description: 'Image error'
+    },
+    not_found: {
+      code: 5001,
+      description: 'Image |var| not found'
+    }
   }
 };
 

@@ -36,6 +36,15 @@ module.exports = {
   createMany(imagesData) {
     return Image.insertMany(imagesData);
   },
+  removeByHandle(handle) {
+    return Image.remove({handle})
+      .then(command => {
+        if (command.result.n === 0) {
+          throw errors.image.not_found.withVar('\"' + handle + '\"');
+        }
+        return command;
+      });
+  },
   removeFileByName(fileName) {
     let uploadsPath = path.resolve(__dirname, '..', 'uploads');
     return new Promise((resolve, reject) => {
@@ -49,13 +58,13 @@ module.exports = {
       resolve(uploadsPath);
     });
   },
-  removeByProjectHandle(projectName) {
-    return Image.find({projectName})
+  removeByProjectHandle(projectHandle) {
+    return Image.find({projectHandle})
       .then(images => {
         images.forEach(image => {
           this.removeFileByName(image.fullName);
         });
-        return Image.remove({projectName});
+        return Image.remove({projectHandle});
       });
   }
 };
