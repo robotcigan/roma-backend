@@ -57,6 +57,15 @@ class ProjectController {
       });
   }
 
+  /**
+   * Update main info about project by handle
+   * @ApiParam {string} handle
+   * @ApiBody? {string} title
+   * @ApiBody? {string} description
+   * @ApiBody? {string} status
+   * @ApiBody? {number} order
+   * @ApiBody? {boolean} active
+   */
   updateByHandle(req, res, next) {
     projectService.updateByHandle(req.params.handle, req.body)
       .then(project => {
@@ -70,6 +79,11 @@ class ProjectController {
       });
   }
 
+  /**
+   * Remove project by handle with images (optional)
+   * @ApiQuery? {string} options [with-images]
+   * @ApiParam {string} handle
+   */
   removeByHandle(req, res, next) {
     const withImages = req.query ? req.query.options.split(',').indexOf('with-images') !== -1 : false;
     projectService.removeByHandle(req.params.handle, withImages)
