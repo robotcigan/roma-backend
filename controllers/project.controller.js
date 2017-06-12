@@ -169,6 +169,19 @@ class ProjectController {
         });
       });
   }
+
+  removeImageById(req, res, next) {
+    projectService.removeImageByHandle(req.params.handle, req.params.imageId)
+      .then(_project => {
+        req.dataOut = _project.clear();
+        next();
+      })
+      .catch(rej => {
+        console.log('rej');
+        console.log(rej);
+        next(rej);
+      });
+  }
 }
 
 module.exports = ProjectController;

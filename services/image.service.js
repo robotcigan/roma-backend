@@ -36,13 +36,14 @@ module.exports = {
   createMany(imagesData) {
     return Image.insertMany(imagesData);
   },
-  removeByHandle(handle) {
-    return Image.remove({handle})
-      .then(command => {
-        if (command.result.n === 0) {
-          throw errors.image.not_found.withVar('\"' + handle + '\"');
+  removeById(id) {
+    return Image.findById(id)
+      .then(image => {
+        if (!image) {
+          throw errors.image.not_found.withVar('\"' + id + '\"');
         }
-        return command;
+        this.removeFileByName(image.fullName);
+        return Image.remove({_id: id});
       });
   },
   removeFileByName(fileName) {

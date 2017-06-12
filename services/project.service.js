@@ -105,7 +105,23 @@ module.exports = {
           });
       });
   },
-  removeImageByHandle(handle, imageHandle) {
-
+  removeImageByHandle(handle, imageId) {
+    return Project.findOneAndUpdate({handle}, {
+      $pull: {
+        images: mongoose.Types.ObjectId(imageId)
+      }
+    }, {new: true})
+      .then(project => {
+        if (!project) {
+          throw errors.project.not_found.withVar('\"' + handle + '\"');
+        }
+        return imageService.removeById(imageId)
+          .then(command => {
+            if (command.result.n === 0) {
+              throw errors.image.not_found.withVar('\"' + imageId + '\"');
+            }
+            return project;
+          });
+      });
   }
 };

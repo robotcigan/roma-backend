@@ -22,6 +22,7 @@ router.get('/:handle', ProjectInstance.getByHandle.bind(ProjectInstance));
 router.put('/:handle', authMw.admin, ProjectInstance.updateByHandle.bind(ProjectInstance));
 // Add images to project by handle
 router.post('/:handle/image', authMw.admin, imageMw.single(), ProjectInstance.addImage.bind(ProjectInstance));
+router.delete('/:handle/image/:imageId', authMw.admin, ProjectInstance.removeImageById.bind(ProjectInstance));
 // Add image to project by handle
 router.post('/:handle/images', authMw.admin, imageMw.array(), ProjectInstance.addImages.bind(ProjectInstance));
 
