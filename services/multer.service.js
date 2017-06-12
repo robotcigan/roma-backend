@@ -6,7 +6,7 @@ module.exports = {
   },
   filename: function(req, file, done) {
     const timestamp = Date.now();
-    req.body.timestamp = timestamp;
+    file.timestamp = timestamp;
     done(null, req.params.handle + '-' + timestamp + '-' + file.originalname);
   }
 };

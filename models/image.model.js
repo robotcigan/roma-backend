@@ -10,7 +10,7 @@ const Image = new mongoose.Schema({
   order: {type: Number, default: 0},
   originalName: {type: String, default: ''},
   fullName: {type: String, default: ''},
-  projectName: {type: String, default: ''},
+  projectHandle: {type: String, default: ''},
   title: {type: String, default: ''},
   description: {type: String, default: ''},
   url: {type: String, default: ''},

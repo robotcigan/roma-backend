@@ -33,6 +33,9 @@ module.exports = {
   create(imageData) {
     return Image.create(imageData);
   },
+  createMany(imagesData) {
+    return Image.insertMany(imagesData);
+  },
   removeFileByName(fileName) {
     let uploadsPath = path.resolve(__dirname, '..', 'uploads');
     return new Promise((resolve, reject) => {

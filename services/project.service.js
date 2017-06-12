@@ -39,6 +39,7 @@ module.exports = {
    * @return {Promise<projectModel>} project
    */
   updateByHandle(handle, data) {
+    data.updated = moment();
     return Project.findOneAndUpdate({handle}, data, {new: true})
       .then(project => {
         if (!project) {
@@ -78,19 +79,22 @@ module.exports = {
       });
   },
   /**
-   * @deprecated
+   * Add images to project by handle
    * @param {string} handle
    * @param {array} imagesData
    * @return {Promise<projectModel>} project
    */
-  addImagesByHandle(handle, imagesData = []) {
+  addImagesByHandle(handle, imagesData) {
     return this.getByHandle(handle)
       .then(project => {
-        _.each(imagesData, item => {
-          project.images.push(item);
-        });
-        project.updated = moment();
-        return project.save();
+        return imageService.createMany(imagesData)
+          .then(_images => {
+            _.each(_images, item => {
+              project.images.push(item);
+            });
+            project.updated = moment();
+            return project.save();
+          });
       });
   }
 };
