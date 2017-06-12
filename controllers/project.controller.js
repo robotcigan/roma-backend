@@ -170,6 +170,11 @@ class ProjectController {
       });
   }
 
+  /**
+   * Remove image by id in project by handle
+   * @ApiParam {string} handle - project
+   * @ApiParam {string} imageId - image ObjectId
+   */
   removeImageById(req, res, next) {
     projectService.removeImageByHandle(req.params.handle, req.params.imageId)
       .then(_project => {
