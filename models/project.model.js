@@ -9,7 +9,7 @@ const Project = new mongoose.Schema({
   description: {type: String, default: ''},
   handle: {type: String, required: true, index: {unique: true}},
   status: {type: String, default: ''},
-  order: {type: Number, default: 0},
+  order: {type: Number, default: 1},
   active: {type: Boolean, default: false},
   created: {type: Date, default: moment()},
   updated: {type: Date, default: moment()},

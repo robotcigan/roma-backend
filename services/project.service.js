@@ -8,30 +8,62 @@ const _ = require('lodash')
     , imageService = require('../services/image.service');
 
 module.exports = {
+  /**
+   * Return all projects
+   * @return {Promise<projectModel>} project
+   */
   getList: function() {
     return Project.find()
       .populate('images')
       .exec()
       .then(projects => {
+        if (projects.length === 0) {
+          throw errors.project.not_found.withVar('\"' + handle + '\"');
+        }
+
         return projects;
-      });
+      })
   },
-  getById(id) {
-  },
+
+  /**
+   * Return project by handle
+   * @param {string} handle
+   * @return {Promise<projectModel>} project
+   */
   getByHandle(handle) {
-    return Project.findOne({handle})
+    return Project.findOne({ handle })
       .populate('images')
       .exec()
       .then(project => {
         if (!project) {
           throw errors.project.not_found.withVar('\"' + handle + '\"');
         }
+
         return project;
       });
   },
-  create({title, description, handle}) {
-    return Project.create({title, description, handle});
+
+  /**
+   * Create new project
+   * @param {string} title
+   * @param {string} description
+   * @param {string} handle
+   * @return {Promise<projectModel>} project
+   */
+  create({ title, description, handle }) {
+    return Project.findOne({}).sort('-order').select('order').exec()
+      .then(highestOrder => {
+        return Project.create({ title, description, handle })
+          .then((project) => {
+            if (highestOrder) {
+              project.order = highestOrder.order + 1;
+            }
+
+            return project.save();
+          })
+      });
   },
+
   /**
    * Update project by handle
    * @param {string} handle
@@ -48,16 +80,19 @@ module.exports = {
         return project;
       });
   },
+
   removeByHandle(handle, withImages) {
-    return Project.remove({handle})
+    return Project.remove({ handle })
       .then(command => {
         let result = {
           project: 0,
           image: 0
         };
+
         if (command.result.n === 0) {
           throw errors.project.not_found.withVar('\"' + handle + '\"');
         }
+
         result.project = command.result.n;
         if (withImages) {
           return imageService.removeByProjectHandle(handle)
@@ -69,6 +104,7 @@ module.exports = {
         return result;
       });
   },
+
   /**
    * Add image to project by handle
    * @param {string} handle
@@ -86,6 +122,7 @@ module.exports = {
           });
       });
   },
+
   /**
    * Add images to project by handle
    * @param {string} handle
@@ -105,6 +142,7 @@ module.exports = {
           });
       });
   },
+
   removeImageByHandle(handle, imageId) {
     return Project.findOneAndUpdate({handle}, {
       $pull: {
